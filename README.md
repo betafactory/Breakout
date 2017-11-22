@@ -1,6 +1,6 @@
 # Breakout
 
-[![Join the chat at https://gitter.im/breakout-electronjs/Lobby](https://badges.gitter.im/breakout-electronjs/Lobby.svg)](https://gitter.im/breakout-electronjs/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/breakout-electronjs/Lobby](https://badges.gitter.im/breakout-electronjs/Lobby.svg)](https://gitter.im/breakout-electronjs/breakout?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 **Breakout is a Desktop game developed using Electron and Javascript**
 
