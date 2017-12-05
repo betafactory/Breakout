@@ -70,7 +70,7 @@ function collisionDetection() {
 		    if(score>highscore) highscore = score;
                     if(score == brickRowCount*brickColumnCount) {
                         alert("YOU WIN, CONGRATS!");
-                        document.location.reload();
+                        restart();
                     }
                 }
             }
