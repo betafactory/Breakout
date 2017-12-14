@@ -23,10 +23,10 @@ var brickOffsetLeft = 30;
 var score = 0;
 var lives = 3;
 var highscore = 0;
-var hitSound=new Audio("Audio/hitb.mp3");
-var loseSound=new Audio("Audio/lose.mp3");
-var winSound=new Audio("Audio/win.mp3");
-var fallSound=new Audio("Audio/fall.mp3");
+var hitSound=new Audio("assets/Audio/hitb.mp3");
+var loseSound=new Audio("assets/Audio/lose.mp3");
+var winSound=new Audio("assets/Audio/win.mp3");
+var fallSound=new Audio("assets/Audio/fall.mp3");
 
 var bricks = [];
 for(c=0; c<brickColumnCount; c++) {
