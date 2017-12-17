@@ -27,14 +27,18 @@ var hitSound=new Audio("assets/Audio/hitb.mp3");
 var loseSound=new Audio("assets/Audio/lose.mp3");
 var winSound=new Audio("assets/Audio/win.mp3");
 var fallSound=new Audio("assets/Audio/fall.mp3");
+var brickHit=0;
 
 var bricks = [];
 for(c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
     for(r=0; r<brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+        bricks[c][r] = { x: 0, y: 0, status: 1,isBonus:0 };
     }
 }
+bricks[0][Math.floor(Math.random()*(5))].isBonus=1;
+bricks[1][Math.floor(Math.random()*(5))].isBonus=1;
+bricks[2][Math.floor(Math.random()*(5))].isBonus=1;
 
 var dialogBox=$("<div>Choose Controls</div>");
 dialogBox.dialog({
@@ -95,13 +99,17 @@ function collisionDetection() {
             var b = bricks[c][r];
             if(b.status == 1) {
                 if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
+                    brickHit++;
                     hitSound.currentTime=0;
                     hitSound.play();
                     dy = -dy;
                     b.status = 0;
-                    score++;
+                    if(b.isBonus===0)
+                        score++;
+                    else
+                        score+=5;
 		    if(score>highscore) highscore = score;
-                    if(score == brickRowCount*brickColumnCount) {
+                    if(brickHit == brickRowCount*brickColumnCount) {
                         winSound.play();
                         setTimeout(function () {
                             alert("YOU WIN, CONGRATS!");
@@ -139,7 +147,10 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#C25800";
+                if(bricks[c][r].isBonus===0)
+                    ctx.fillStyle = "#C25800";
+                else
+                    ctx.fillStyle = "#FF8C00"
                 ctx.fill();
                 ctx.closePath();
             }
@@ -208,13 +219,17 @@ function draw() {
 }
 function restart(){
 	score = 0;
+	brickHit=0;
 	lives = 3;
 	for(c=0; c<brickColumnCount; c++) {
     	bricks[c] = [];
     	for(r=0; r<brickRowCount; r++) {
-        	bricks[c][r] = { x: 0, y: 0, status: 1 };
-    	}
+        	bricks[c][r] = { x: 0, y: 0, status: 1,isBonus:0 };
+        }
 	}
+    bricks[0][Math.floor(Math.random()*(5))].isBonus=1;
+    bricks[1][Math.floor(Math.random()*(5))].isBonus=1;
+    bricks[2][Math.floor(Math.random()*(5))].isBonus=1;
 	x = canvas.width/2;
 	y = canvas.height-30;
 	dx = 2;
