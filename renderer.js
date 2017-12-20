@@ -6,8 +6,8 @@ var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 var x = canvas.width/2;
 var y = canvas.height-30;
-var dx = 2;
-var dy = -2;
+var dx = 3;
+var dy = -3;
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width-paddleWidth)/2;
@@ -28,6 +28,9 @@ var loseSound=new Audio("assets/Audio/lose.mp3");
 var winSound=new Audio("assets/Audio/win.mp3");
 var fallSound=new Audio("assets/Audio/fall.mp3");
 var brickHit=0;
+var storedx=0;
+var storedy=0;
+
 
 var bricks = [];
 for(c=0; c<brickColumnCount; c++) {
@@ -40,35 +43,79 @@ bricks[0][Math.floor(Math.random()*(5))].isBonus=1;
 bricks[1][Math.floor(Math.random()*(5))].isBonus=1;
 bricks[2][Math.floor(Math.random()*(5))].isBonus=1;
 
+
+
 var dialogBox=$("<div>Choose Controls</div>");
-dialogBox.dialog({
+var settings=$("<div>Choose Difficulty level</div>");
+settings.dialog({
     dialogClass: "no-close",
     autoOpen: true,
     buttons: {
 
-        Keyboard: function() {
-
-            document.addEventListener("keydown", keyDownHandler, false);
-            document.addEventListener("keyup", keyUpHandler, false);
-            dialogBox.dialog("close");
-            draw();
+        Easy: function() {
+            paddleWidth=100;
+            dx=3;
+            dy=-3;
+            storedx=dx;
+            storedy=dy;
+            settings.dialog("close");
+            chooseControls();
         },
-        Mouse: function() {
-
-            document.addEventListener("mousemove", mouseMoveHandler, false);
-            document.removeEventListener("keydown",function removeKeyboard() {
-                console.log("Keyboard removed");
-            });
-            document.removeEventListener("keyup",function removeKeyup() {
-                console.log("Keyboard Removed");
-            })
-            dialogBox.dialog("close");
-            draw();
+        Medium: function() {
+            paddleWidth=75;
+            difficulty=1;
+            dx=4;
+            dy=-4;
+            storedx=dx;
+            storedy=dy;
+            settings.dialog("close");
+            chooseControls();
+        },
+        Difficult: function() {
+            paddleWidth=50;
+            dx=5;
+            dy=-5;
+            storedx=dx;
+            storedy=dy;
+            settings.dialog("close");
+            chooseControls();
         }
 
     },
     width: "400px"
 });
+
+
+function chooseControls() {
+    dialogBox.dialog({
+        dialogClass: "no-close",
+        autoOpen: true,
+        buttons: {
+
+            Keyboard: function() {
+
+                document.addEventListener("keydown", keyDownHandler, false);
+                document.addEventListener("keyup", keyUpHandler, false);
+                dialogBox.dialog("close");
+                draw();
+            },
+            Mouse: function() {
+
+                document.addEventListener("mousemove", mouseMoveHandler, false);
+                document.removeEventListener("keydown",function removeKeyboard() {
+                    console.log("Keyboard removed");
+                });
+                document.removeEventListener("keyup",function removeKeyup() {
+                    console.log("Keyboard Removed");
+                })
+                dialogBox.dialog("close");
+                draw();
+            }
+
+        },
+        width: "400px"
+    });
+}
 
 
 function keyDownHandler(e) {
@@ -208,8 +255,8 @@ function draw() {
                 fallSound.play();
                 x = canvas.width/2;
                 y = canvas.height-30;
-                dx = 3;
-                dy = -3;
+                dx = storedx;
+                dy = storedy;
                 paddleX = (canvas.width-paddleWidth)/2;
             }
         }
@@ -232,8 +279,8 @@ function restart(){
     bricks[2][Math.floor(Math.random()*(5))].isBonus=1;
 	x = canvas.width/2;
 	y = canvas.height-30;
-	dx = 2;
-	dy = -2;
+	dx = storedx;
+	dy = storedy;
 }
 
 function resetPaddle() {
