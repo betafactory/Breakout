@@ -1,38 +1,38 @@
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-var ballRadius = 10;
-var x = canvas.width/2;
-var y = canvas.height-30;
-var dx = 3;
-var dy = -3;
-var paddleHeight = 10;
-var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth)/2;
-var rightPressed = false;
-var leftPressed = false;
-var brickRowCount = 5;
-var brickColumnCount = 3;
-var brickWidth = 75;
-var brickHeight = 20;
-var brickPadding = 10;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 30;
-var score = 0;
-var lives = 3;
-var highscore = 0;
-var hitSound=new Audio("assets/Audio/hitb.mp3");
-var loseSound=new Audio("assets/Audio/lose.mp3");
-var winSound=new Audio("assets/Audio/win.mp3");
-var fallSound=new Audio("assets/Audio/fall.mp3");
-var brickHit=0;
-var storedx=0;
-var storedy=0;
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+const ballRadius = 10;
+let x = canvas.width / 2;
+let y = canvas.height - 30;
+let dx = 3;
+let dy = -3;
+const paddleHeight = 10;
+let paddleWidth = 75;
+let paddleX = (canvas.width - paddleWidth) / 2;
+let rightPressed = false;
+let leftPressed = false;
+const brickRowCount = 5;
+const brickColumnCount = 3;
+const brickWidth = 75;
+const brickHeight = 20;
+const brickPadding = 10;
+const brickOffsetTop = 30;
+const brickOffsetLeft = 30;
+let score = 0;
+let lives = 3;
+let highscore = 0;
+const hitSound = new Audio("assets/Audio/hitb.mp3");
+const loseSound = new Audio("assets/Audio/lose.mp3");
+const winSound = new Audio("assets/Audio/win.mp3");
+const fallSound = new Audio("assets/Audio/fall.mp3");
+let brickHit = 0;
+let storedx = 0;
+let storedy = 0;
 
 
-var bricks = [];
+const bricks = [];
 for(c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
     for(r=0; r<brickRowCount; r++) {
@@ -44,9 +44,8 @@ bricks[1][Math.floor(Math.random()*(5))].isBonus=1;
 bricks[2][Math.floor(Math.random()*(5))].isBonus=1;
 
 
-
-var dialogBox=$("<div>Choose Controls</div>");
-var settings=$("<div>Choose Difficulty level</div>");
+const dialogBox = $("<div>Choose Controls</div>");
+const settings = $("<div>Choose Difficulty level</div>");
 settings.dialog({
     dialogClass: "no-close",
     autoOpen: true,
@@ -107,7 +106,7 @@ function chooseControls() {
                 });
                 document.removeEventListener("keyup",function removeKeyup() {
                     console.log("Keyboard Removed");
-                })
+                });
                 dialogBox.dialog("close");
                 draw();
             }
@@ -119,23 +118,26 @@ function chooseControls() {
 
 
 function keyDownHandler(e) {
-    if(e.keyCode == 39) {
+    if(e.keyCode === 39) {
         rightPressed = true;
     }
-    else if(e.keyCode == 37) {
+    else if(e.keyCode === 37) {
         leftPressed = true;
+    }
+    else if (e.key === "Escape"){
+        alert("PAUSED!")
     }
 }
 function keyUpHandler(e) {
-    if(e.keyCode == 39) {
+    if(e.keyCode === 39) {
         rightPressed = false;
     }
-    else if(e.keyCode == 37) {
+    else if(e.keyCode === 37) {
         leftPressed = false;
     }
 }
 function mouseMoveHandler(e) {
-    var relativeX = e.clientX - canvas.offsetLeft;
+    const relativeX = e.clientX - canvas.offsetLeft;
     if(relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth/2;
     }
@@ -143,8 +145,8 @@ function mouseMoveHandler(e) {
 function collisionDetection() {
     for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
-            var b = bricks[c][r];
-            if(b.status == 1) {
+            const b = bricks[c][r];
+            if(b.status === 1) {
                 if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
                     brickHit++;
                     hitSound.currentTime=0;
@@ -156,7 +158,7 @@ function collisionDetection() {
                     else
                         score+=5;
 		    if(score>highscore) highscore = score;
-                    if(brickHit == brickRowCount*brickColumnCount) {
+                    if(brickHit === brickRowCount*brickColumnCount) {
                         winSound.play();
                         setTimeout(function () {
                             alert("YOU WIN, CONGRATS!");
@@ -187,9 +189,9 @@ function drawPaddle() {
 function drawBricks() {
     for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
-            if(bricks[c][r].status == 1) {
-                var brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
-                var brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
+            if(bricks[c][r].status === 1) {
+                const brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
+                const brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
                 bricks[c][r].x = brickX;
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
@@ -197,7 +199,7 @@ function drawBricks() {
                 if(bricks[c][r].isBonus===0)
                     ctx.fillStyle = "#C25800";
                 else
-                    ctx.fillStyle = "#FF8C00"
+                    ctx.fillStyle = "#FF8C00";
                 ctx.fill();
                 ctx.closePath();
             }
@@ -219,6 +221,8 @@ function drawLives() {
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
+
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
